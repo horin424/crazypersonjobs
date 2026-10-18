@@ -7,4 +7,6 @@ data/*.db-shm
 data/*.db-wal
 logs/*.log
 .pytest_cache/
-
+build/
+dist/
+*.spec.bak

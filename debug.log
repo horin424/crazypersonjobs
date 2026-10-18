@@ -6,3 +6,19 @@
 [1002/174430.400:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
 [1002/174512.428:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
 [1002/174514.095:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1002/193700.242:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1002/193701.394:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/154425.967:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/154428.039:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/161518.143:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/161518.346:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:181] Failed to post task from operator()@net\extras\sqlite\sqlite_persistent_shared_dictionary_store.cc:259 to client_task_runner_.
+[1007/161519.445:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/170954.148:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/170955.306:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/170955.675:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:181] Failed to post task from operator()@net\extras\sqlite\sqlite_persistent_shared_dictionary_store.cc:259 to client_task_runner_.
+[1007/171444.453:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/171445.687:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/180340.556:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/180342.507:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/180451.276:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1
+[1007/180452.593:ERROR:net\base\network_change_notifier_win.cc:224] WSALookupServiceBegin failed with: -1

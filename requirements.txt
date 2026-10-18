@@ -1,6 +1,9 @@
 aiosqlite>=0.20,<1
+certifi>=2025.8.3
 playwright>=1.48,<2
 python-dotenv>=1.0,<2
 tzdata>=2025.2
 pytest>=8,<9
 pytest-asyncio>=0.24,<1
+pyinstaller>=6.10,<7
+PySide6-Essentials>=6.8,<7

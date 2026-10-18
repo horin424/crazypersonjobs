@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import sqlite3
 from pathlib import Path
 
 import aiosqlite
@@ -10,13 +11,17 @@ from utils.time_utils import now_jst_iso
 
 
 class Database:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, legacy_path: Path | None = None) -> None:
         self.path = path
+        self.legacy_path = legacy_path
         self._connection: aiosqlite.Connection | None = None
         self._lock = asyncio.Lock()
 
     async def connect(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        if (self.legacy_path is not None and self.legacy_path != self.path
+                and self.legacy_path.exists() and not self.path.exists()):
+            await asyncio.to_thread(self._migrate_legacy_database)
         self._connection = await aiosqlite.connect(self.path)
         self._connection.row_factory = aiosqlite.Row
         await self._connection.execute("PRAGMA journal_mode=WAL")
@@ -50,7 +55,22 @@ class Database:
             );
             """
         )
+        # Builds before this fix treated the first three baseline rows as new.
+        # They are identifiable by initial_position and must never be retried.
+        await self._connection.execute(
+            """UPDATE projects SET notification_required = 0
+               WHERE initial_position IS NOT NULL AND notification_sent = 0"""
+        )
         await self._connection.commit()
+
+    def _migrate_legacy_database(self) -> None:
+        source = sqlite3.connect(self.legacy_path)
+        destination = sqlite3.connect(self.path)
+        try:
+            source.backup(destination)
+        finally:
+            destination.close()
+            source.close()
 
     @property
     def connection(self) -> aiosqlite.Connection:
@@ -87,7 +107,9 @@ class Database:
                 notifications: list[Project] = []
                 inserted_count = 0
                 for project in projects:
-                    required = baseline and (project.position or 0) <= 3 or not baseline
+                    # The first successful scan establishes history only. Every
+                    # later insert is genuinely new and requires notification.
+                    required = not baseline
                     cursor = await db.execute(
                         """
                         INSERT INTO projects (
@@ -113,17 +135,6 @@ class Database:
                             "UPDATE projects SET last_seen_at = ? WHERE platform = ? AND project_id = ?",
                             (project.scraped_at, project.platform, project.project_id),
                         )
-                        # A project first seen low in another category's baseline may still be
-                        # eligible as this category's top-three baseline item.
-                        if baseline and required:
-                            cursor = await db.execute(
-                                """UPDATE projects SET notification_required = 1
-                                   WHERE platform = ? AND project_id = ?
-                                     AND notification_required = 0 AND notification_sent = 0""",
-                                (project.platform, project.project_id),
-                            )
-                            if cursor.rowcount == 1:
-                                notifications.append(project.requiring_notification())
                 now = now_jst_iso()
                 await db.execute(
                     """
